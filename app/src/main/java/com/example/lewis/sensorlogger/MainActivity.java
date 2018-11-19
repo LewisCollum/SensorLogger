@@ -23,6 +23,18 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onResume(){
+        super.onResume();
+        accelerometer = new SensorRecorder(this, Sensor.TYPE_LINEAR_ACCELERATION);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        accelerometer.stopRecording();
+    }
+
+    @Override
     protected void onDestroy(){
         super.onDestroy();
         accelerometer.stopRecording();
