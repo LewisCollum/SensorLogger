@@ -4,36 +4,33 @@ import android.app.Activity;
 import android.os.Bundle;
 
 public class MainActivity extends Activity {
-    private AccelerationSensorRecorder accelerometer;
-    private AccelerationRecord accelerationBufferForDatabase;
-    private DatabaseUpdater databaseUpdater;
+    private SensorLogManager sensorLogManager;
+    private AccelerationSensorLogger accelerationSensorLogger;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        accelerationBufferForDatabase = new AccelerationRecord();
-        databaseUpdater = new DatabaseUpdater(1000);
-        databaseUpdater.addRecord(accelerationBufferForDatabase);
-        accelerometer = new AccelerationSensorRecorder(this, accelerationBufferForDatabase);
-        accelerometer.start();
+        sensorLogManager = new SensorLogManager(this, SensorTableConfiguration.tables);
+        accelerationSensorLogger = new AccelerationSensorLogger(this, sensorLogManager);
+        accelerationSensorLogger.start();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-        accelerometer = new AccelerationSensorRecorder(this, accelerationBufferForDatabase);
+        accelerationSensorLogger = new AccelerationSensorLogger(this, sensorLogManager);
     }
 
     @Override
     protected void onPause(){
         super.onPause();
-        accelerometer.stop();
+        accelerationSensorLogger.stop();
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        accelerometer.stop();
+        accelerationSensorLogger.stop();
     }
 }

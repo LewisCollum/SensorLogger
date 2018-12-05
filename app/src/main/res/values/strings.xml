@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">SensorLogger</string>
-    <string name="time">milliseconds</string>
-    <string name="acceleration">acceleration</string>
+    <string name="submit">Submit</string>
+    <string name="restart">Restart</string>
 </resources>
