@@ -2,11 +2,13 @@ package com.example.lewis.sensorlogger;
 
 public class SQLStringTableGenerator {
     private static StringBuilder sqlCommand;
-    private static SensorTable table;
+    private static String tableName;
+    private static SQLColumn[] columns;
 
-    public static String generate(SensorTable table) {
-        SQLStringTableGenerator.table = table;
+    public static String generate(String tableName, SQLColumn[] columns) {
         sqlCommand = new StringBuilder();
+        SQLStringTableGenerator.tableName = tableName;
+        SQLStringTableGenerator.columns = columns;
 
         createTableCommand();
         createColumnParameters();
@@ -16,7 +18,7 @@ public class SQLStringTableGenerator {
 
     private static void createTableCommand() {
         sqlCommand.append("create table ");
-        sqlCommand.append(table.name);
+        sqlCommand.append(tableName);
     }
 
     private static void createColumnParameters() {
@@ -28,17 +30,17 @@ public class SQLStringTableGenerator {
     }
 
     private static void createFirstColumnParameter() {
-        SQLColumn firstColumn = table.columns[0];
+        SQLColumn firstColumn = columns[0];
         sqlCommand.append(firstColumn.name);
         sqlCommand.append(" ");
         sqlCommand.append(firstColumn.dataType);
     }
 
     private static void createRemainingColumnParametersWithoutCommaAtEnd() {
-        int numberOfColumns = table.columns.length;
+        int numberOfColumns = columns.length;
 
         for (int columnIndex = 1; columnIndex < numberOfColumns; ++columnIndex) {
-            SQLColumn column = table.columns[columnIndex];
+            SQLColumn column = columns[columnIndex];
             sqlCommand.append(", ");
             sqlCommand.append(column.name);
             sqlCommand.append(" ");

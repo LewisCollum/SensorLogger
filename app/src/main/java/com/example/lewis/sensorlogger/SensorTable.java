@@ -4,7 +4,7 @@ public class SensorTable {
     public String name;
     public SQLColumn[] columns;
 
-    SensorTable(String name, SQLColumn[] columns){
+    public SensorTable(String name, SQLColumn[] columns){
         this.name = name;
         this.columns = columns;
     }

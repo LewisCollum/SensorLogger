@@ -4,56 +4,65 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
 public class SensorLogManager extends SQLiteOpenHelper {
-    private SensorTable[] sensorTables;
+    ArrayList<String> tableNames;
 
-    public SensorLogManager(Context context, SensorTable[] sensorTables){
+    public SensorLogManager(Context context){
         super(context, SensorLogInformation.name, null, SensorLogInformation.version);
-        this.sensorTables = sensorTables;
+        tableNames = new ArrayList<>();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createTables(db);
     }
 
-    private void createTables(SQLiteDatabase db) {
-        String[] tableCommands = SQLStringTablesGenerator.generate(sensorTables);
-        for (String tableCommand : tableCommands) {
-            db.execSQL(tableCommand);
-        }
+    public void createTable(String name, SQLColumn[] columnNames) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        tableNames.add(name);
+        onUpgrade(db, 1, 1);
+        String tableCommand = SQLStringTableGenerator.generate(name, columnNames);
+        db.execSQL(tableCommand);
     }
 
     public void insert(SensorSample sample, String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(SQLStringTableInsertGenerator.generate(sample, tableName));
+        String sampleString = sample.values[0] + ", " + sample.values[1] + ", " + sample.values[2];
+        Log.v("Insert", sampleString);
         db.close();
     }
 
     //TODO figure out better way to do this!!!
-    public ArrayList<SensorSample> selectAllFromTable(SensorTable sensorTable) {
-        String sqlQuery = "select * from " + sensorTable.name;
+    public ArrayList<SensorSample> selectAllFromTable(String tableName, SQLColumn[] columnNames) {
+        String sqlQuery = "select * from " + tableName;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sqlQuery, null);
 
-        int sensorSampleColumnSize = sensorTable.columns.length;
+        int sensorSampleColumnSize = columnNames.length;
         ArrayList<SensorSample> sensorSamples = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             SensorSample currentSample = new SensorSample(new String[sensorSampleColumnSize]);
             for (int columnIndex = 0; columnIndex < sensorSampleColumnSize; ++columnIndex) {
-                currentSample.values[columnIndex] = sensorTable.columns[columnIndex].name;
+                int sqlColumnIndex = cursor.getColumnIndex(columnNames[columnIndex].name);
+                currentSample.values[columnIndex] = cursor.getString(sqlColumnIndex);
             }
+            sensorSamples.add(currentSample);
         }
+        db.close();
         return sensorSamples;
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        for (String tableName : tableNames) {
+            db.execSQL("drop table if exists " + tableName);
+        }
+        onCreate(db);
     }
 }
 

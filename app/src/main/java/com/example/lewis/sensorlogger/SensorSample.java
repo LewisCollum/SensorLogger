@@ -5,7 +5,7 @@ public class SensorSample {
 
     SensorSample(String[] values) {
         this.values = values;
-    }
 
+    }
 
 }
