@@ -7,11 +7,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-public abstract class SensorLoggerHelper implements SensorEventListener  {
+public abstract class SensorListenerHelper implements SensorEventListener  {
     private SensorManager sensorManager;
     private Sensor sensor;
 
-    SensorLoggerHelper(Context context, int sensorType) {
+    SensorListenerHelper(Context context, int sensorType) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         if (hasSensor(sensorType))
             setSensor(sensorType);

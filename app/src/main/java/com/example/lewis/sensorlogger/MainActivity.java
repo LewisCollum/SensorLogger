@@ -3,6 +3,7 @@ package com.example.lewis.sensorlogger;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 public class MainActivity extends Activity {
     private SensorLogManager sensorLogManager;
     private AccelerationSensorLogger accelerationSensorLogger;
+    private SwipeTapSensorLogger swipeTapSensorLogger;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -17,15 +19,24 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         sensorLogManager = new SensorLogManager(this);
         sensorLogManager.createTable(AccelerationTable.name, AccelerationTable.columns);
+
         accelerationSensorLogger = new AccelerationSensorLogger(this, sensorLogManager);
+        swipeTapSensorLogger = new SwipeTapSensorLogger(this, sensorLogManager);
+
+        swipeTapSensorLogger.start();
         accelerationSensorLogger.start();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        swipeTapSensorLogger.onTouchEvent(ev);
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
         findViewById(R.id.submitButton).setOnClickListener(new SubmitButton());
-
     }
 
     @Override

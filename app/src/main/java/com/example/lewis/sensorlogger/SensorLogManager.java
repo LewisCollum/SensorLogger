@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -31,8 +30,6 @@ public class SensorLogManager extends SQLiteOpenHelper {
     public void insert(SensorSample sample, String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(SQLStringTableInsertGenerator.generate(sample, tableName));
-        String sampleString = sample.values[0] + ", " + sample.values[1] + ", " + sample.values[2];
-        Log.v("Insert", sampleString);
         db.close();
     }
 
