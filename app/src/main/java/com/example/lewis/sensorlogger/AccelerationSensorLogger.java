@@ -3,7 +3,6 @@ package com.example.lewis.sensorlogger;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
-import android.util.Log;
 
 public class AccelerationSensorLogger extends SensorLoggerHelper {
     private SensorLogManager sensorLogManager;
@@ -14,7 +13,7 @@ public class AccelerationSensorLogger extends SensorLoggerHelper {
     }
 
     @Override
-    void record(SensorEvent sensorReading) {
+    public void onSensorChanged(SensorEvent sensorReading) {
         float[] readings = sensorReading.values;
         long time = System.currentTimeMillis();
 

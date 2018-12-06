@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 public abstract class SensorLoggerHelper implements SensorEventListener  {
     private SensorManager sensorManager;
@@ -32,13 +33,6 @@ public abstract class SensorLoggerHelper implements SensorEventListener  {
     private void setSensor(int sensorType) {
         sensor = sensorManager.getDefaultSensor(sensorType);
     }
-
-    @Override
-    public void onSensorChanged(SensorEvent sensorReading) {
-        record(sensorReading);
-    }
-
-    abstract void record(SensorEvent sensorReading);
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}
