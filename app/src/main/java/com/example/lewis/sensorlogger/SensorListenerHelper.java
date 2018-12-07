@@ -2,10 +2,8 @@ package com.example.lewis.sensorlogger;
 
 import android.content.Context;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 public abstract class SensorListenerHelper implements SensorEventListener  {
     private SensorManager sensorManager;
@@ -18,7 +16,7 @@ public abstract class SensorListenerHelper implements SensorEventListener  {
     }
 
     public void start() {
-        int samplingPeriodUs = SensorManager.SENSOR_DELAY_NORMAL;
+        int samplingPeriodUs = SensorManager.SENSOR_DELAY_GAME;
         sensorManager.registerListener(this, sensor, samplingPeriodUs);
     }
 

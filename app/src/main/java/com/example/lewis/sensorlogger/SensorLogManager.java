@@ -8,11 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 
 public class SensorLogManager extends SQLiteOpenHelper {
-    ArrayList<String> tableNames;
 
     public SensorLogManager(Context context){
         super(context, SensorLogInformation.name, null, SensorLogInformation.version);
-        tableNames = new ArrayList<>();
+        SensorLogTime.setStartMillis(System.currentTimeMillis());
     }
 
     @Override
@@ -21,8 +20,6 @@ public class SensorLogManager extends SQLiteOpenHelper {
 
     public void createTable(String name, SQLColumn[] columnNames) {
         SQLiteDatabase db = this.getWritableDatabase();
-        tableNames.add(name);
-        onUpgrade(db, 1, 1);
         String tableCommand = SQLStringTableGenerator.generate(name, columnNames);
         db.execSQL(tableCommand);
     }
@@ -30,6 +27,7 @@ public class SensorLogManager extends SQLiteOpenHelper {
     public void insert(SensorSample sample, String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(SQLStringTableInsertGenerator.generate(sample, tableName));
+        ++SensorLogInformation.currentColumn;
         db.close();
     }
 
@@ -39,14 +37,19 @@ public class SensorLogManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sqlQuery, null);
 
-        int sensorSampleColumnSize = columnNames.length;
+        int columnOffsetDueToTimeStamp = 1;
+        int columnSize = columnNames.length;
+        int columnSizeWithoutTimeStamp = columnSize - columnOffsetDueToTimeStamp;
         ArrayList<SensorSample> sensorSamples = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            SensorSample currentSample = new SensorSample(new String[sensorSampleColumnSize]);
-            for (int columnIndex = 0; columnIndex < sensorSampleColumnSize; ++columnIndex) {
+            int sqlIDIndex = cursor.getColumnIndex(SensorTable.timeColumnName);
+            long timeStamp = Long.parseLong(cursor.getString(sqlIDIndex));
+            SensorSample currentSample = new SensorSample(timeStamp, new String[columnSizeWithoutTimeStamp]);
+
+            for (int columnIndex = columnOffsetDueToTimeStamp; columnIndex < columnSize; ++columnIndex) {
                 int sqlColumnIndex = cursor.getColumnIndex(columnNames[columnIndex].name);
-                currentSample.values[columnIndex] = cursor.getString(sqlColumnIndex);
+                currentSample.values[columnIndex - columnOffsetDueToTimeStamp] = cursor.getString(sqlColumnIndex);
             }
             sensorSamples.add(currentSample);
         }
@@ -56,10 +59,6 @@ public class SensorLogManager extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        for (String tableName : tableNames) {
-            db.execSQL("drop table if exists " + tableName);
-        }
-        onCreate(db);
     }
 }
 

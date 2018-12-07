@@ -9,6 +9,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
+    private static String TAG = MainActivity.class.getName();
     private SensorLogManager sensorLogManager;
     private AccelerationSensorLogger accelerationSensorLogger;
     private SwipeTapSensorLogger swipeTapSensorLogger;
@@ -17,20 +18,27 @@ public class MainActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.deleteDatabase(SensorLogInformation.name);
         sensorLogManager = new SensorLogManager(this);
-        sensorLogManager.createTable(AccelerationTable.name, AccelerationTable.columns);
+        sensorLogManager.createTable(AccelerationSensorTable.name, AccelerationSensorTable.columns);
+        sensorLogManager.createTable(SwipeSensorTable.name, SwipeSensorTable.columns);
 
         accelerationSensorLogger = new AccelerationSensorLogger(this, sensorLogManager);
         swipeTapSensorLogger = new SwipeTapSensorLogger(this, sensorLogManager);
 
+        accelerationSensorLogger.startUp();
+        swipeTapSensorLogger.setSensorLoggersToActivateOnTouch( new SensorLogger[] {
+                accelerationSensorLogger
+        });
+
         swipeTapSensorLogger.start();
-        accelerationSensorLogger.start();
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        swipeTapSensorLogger.onTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        swipeTapSensorLogger.onSwipeTapEvent(event);
+        return super.dispatchTouchEvent(event);
     }
 
     @Override
@@ -42,25 +50,38 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause(){
         super.onPause();
-        accelerationSensorLogger.stop();
+        accelerationSensorLogger.shutDown();
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        accelerationSensorLogger.stop();
+        accelerationSensorLogger.shutDown();
     }
 
     private class SubmitButton implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            accelerationSensorLogger.stop();
-            ArrayList<SensorSample> databaseCopy = sensorLogManager.selectAllFromTable(
-                    AccelerationTable.name,
-                    AccelerationTable.columns);
-            Log.v("SIZE", String.valueOf(databaseCopy.size()));
-            SensorSample firstSample = databaseCopy.get(0);
-            Log.v("FIRST VALUE", firstSample.values[0]);
+            accelerationSensorLogger.shutDown();
+            ArrayList<SensorSample> acceleration = sensorLogManager.selectAllFromTable(
+                    AccelerationSensorTable.name,
+                    AccelerationSensorTable.columns);
+            Log.v(TAG, String.valueOf(acceleration.size()));
+
+            ArrayList<SensorSample> swipe = sensorLogManager.selectAllFromTable(
+                    SwipeSensorTable.name,
+                    SwipeSensorTable.columns);
+            Log.v(TAG, String.valueOf(swipe.size()));
+
+            for (int i = 0; i < acceleration.size(); ++i) {
+                SensorSample sample = acceleration.get(i);
+                Log.v(TAG, sample.timeStamp + ": " + sample.values[0] + ", " + sample.values[1] + ", " + sample.values[2]);
+            }
+
+            for (int i = 0; i < swipe.size(); ++i) {
+                SensorSample sample = swipe.get(i);
+                Log.v(TAG, sample.timeStamp + ": " + sample.values[0]);
+            }
         }
     }
 }

@@ -2,7 +2,6 @@ package com.example.lewis.sensorlogger;
 
 import android.content.Context;
 import android.support.v4.view.GestureDetectorCompat;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -24,9 +23,28 @@ public abstract class TouchListenerHelper extends ListenerHelper implements Gest
     }
 
     public void onTouchEvent(MotionEvent event) {
-        if (gestureDetector != null) {
-            gestureDetector.onTouchEvent(event);
+        if (gestureDetectorIsRunning()) {
+            handleEvent(event);
         }
+    }
+
+    private boolean gestureDetectorIsRunning() {
+        return gestureDetector != null;
+    }
+
+    private void handleEvent(MotionEvent event) {
+        if (actionIsUp(event)) {
+            onUp(event);
+        }
+        gestureDetector.onTouchEvent(event);
+    }
+
+    private boolean actionIsUp(MotionEvent event) {
+        return event.getActionMasked() == MotionEvent.ACTION_UP;
+    }
+
+    public boolean onUp(MotionEvent e) {
+        return false;
     }
 
     @Override
@@ -56,4 +74,6 @@ public abstract class TouchListenerHelper extends ListenerHelper implements Gest
     @Override
     public void onShowPress(MotionEvent e) {
     }
+
+
 }

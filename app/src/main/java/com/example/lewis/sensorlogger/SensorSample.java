@@ -2,10 +2,11 @@ package com.example.lewis.sensorlogger;
 
 public class SensorSample {
     public String[] values;
+    public long timeStamp;
 
-    SensorSample(String[] values) {
+    SensorSample(long timeStamp, String[] values) {
         this.values = values;
-
+        this.timeStamp = timeStamp;
     }
 
 }

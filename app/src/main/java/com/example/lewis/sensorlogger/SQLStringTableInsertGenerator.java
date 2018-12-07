@@ -26,8 +26,8 @@ public class SQLStringTableInsertGenerator {
         int numberOfValues = sample.values.length;
 
         sqlCommand.append("(");
-        sqlCommand.append(sample.values[0]);
-        for (int valueIndex = 1; valueIndex < numberOfValues; ++valueIndex) {
+        sqlCommand.append(String.valueOf(sample.timeStamp));
+        for (int valueIndex = 0; valueIndex < numberOfValues; ++valueIndex) {
             sqlCommand.append(", ");
             sqlCommand.append(sample.values[valueIndex]);
         }
