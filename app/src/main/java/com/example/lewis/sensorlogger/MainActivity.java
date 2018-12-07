@@ -70,8 +70,6 @@ public class MainActivity extends Activity {
         accelerationSensorLogger.shutDown();
     }
 
-    private class
-
     private class SubmitButton implements View.OnClickListener {
         @Override
         public void onClick(View v) {
