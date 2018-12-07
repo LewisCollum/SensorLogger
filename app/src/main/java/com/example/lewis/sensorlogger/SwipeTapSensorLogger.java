@@ -67,6 +67,11 @@ public final class SwipeTapSensorLogger extends SensorLogger {
         public boolean onUp(MotionEvent e) {
             Log.v(TAG, "ON UP ----");
             deactivateSensorLoggersIfPresent();
+
+            long timeStamp = SensorLogTime.currentMillis(System.currentTimeMillis());
+            TapSensorSample sample = new TapSensorSample(timeStamp, "\"Finger up\"");
+            sensorLogManager.insert(sample, TapSensorTable.name);
+
             return super.onUp(e);
         }
 
@@ -74,6 +79,11 @@ public final class SwipeTapSensorLogger extends SensorLogger {
         public boolean onDown(MotionEvent e) {
             Log.v(TAG, "ON DOWN ----");
             activateSensorLoggersIfPresent();
+
+            long timeStamp = SensorLogTime.currentMillis(System.currentTimeMillis());
+            TapSensorSample sample = new TapSensorSample(timeStamp, "\"Finger down\"");
+            sensorLogManager.insert(sample, TapSensorTable.name);
+
             return super.onDown(e);
         }
 
@@ -82,11 +92,11 @@ public final class SwipeTapSensorLogger extends SensorLogger {
             String swipeDirection;
             if (distanceY > 0) {
                 Log.v(TAG, "Swiped Up");
-                swipeDirection = "\"UP\"";
+                swipeDirection = "\"Swiping UP\"";
             }
             else {
                 Log.v(TAG, "Swiped Down");
-                swipeDirection = "\"DOWN\"";
+                swipeDirection = "\"Swiping DOWN\"";
             }
 
             long timeStamp = SensorLogTime.currentMillis(System.currentTimeMillis());

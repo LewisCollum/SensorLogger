@@ -19,15 +19,29 @@ public class SensorLogManager extends SQLiteOpenHelper {
     }
 
     public void createTable(String name, SQLColumn[] columnNames) {
+        addToTotalColumns(columnNames);
+        updateMostColumnsInTable(columnNames);
         SQLiteDatabase db = this.getWritableDatabase();
         String tableCommand = SQLStringTableGenerator.generate(name, columnNames);
         db.execSQL(tableCommand);
     }
 
+    //TODO extract class
+    private void addToTotalColumns(SQLColumn[] columns) {
+        SensorLogInformation.totalColumns += columns.length;
+    }
+
+    //TODO extract class
+    private void updateMostColumnsInTable(SQLColumn[] columns) {
+        if (columns.length > SensorLogInformation.mostColumnsInTable) {
+            SensorLogInformation.mostColumnsInTable = columns.length;
+        }
+    }
+
     public void insert(SensorSample sample, String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(SQLStringTableInsertGenerator.generate(sample, tableName));
-        ++SensorLogInformation.currentColumn;
+        ++SensorLogInformation.totalRows;
         db.close();
     }
 

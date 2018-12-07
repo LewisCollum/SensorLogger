@@ -1,6 +1,7 @@
 package com.example.lewis.sensorlogger;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -23,6 +24,7 @@ public class MainActivity extends Activity {
         sensorLogManager = new SensorLogManager(this);
         sensorLogManager.createTable(AccelerationSensorTable.name, AccelerationSensorTable.columns);
         sensorLogManager.createTable(SwipeSensorTable.name, SwipeSensorTable.columns);
+        sensorLogManager.createTable(TapSensorTable.name, TapSensorTable.columns);
 
         accelerationSensorLogger = new AccelerationSensorLogger(this, sensorLogManager);
         swipeTapSensorLogger = new SwipeTapSensorLogger(this, sensorLogManager);
@@ -82,6 +84,9 @@ public class MainActivity extends Activity {
                 SensorSample sample = swipe.get(i);
                 Log.v(TAG, sample.timeStamp + ": " + sample.values[0]);
             }
+
+            Intent formCompletedIntent = new Intent(MainActivity.this, FormCompletedActivity.class);
+            MainActivity.this.startActivity(formCompletedIntent);
         }
     }
 }

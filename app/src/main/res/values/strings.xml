@@ -2,4 +2,7 @@
     <string name="app_name">SensorLogger</string>
     <string name="submit">Submit</string>
     <string name="restart">Restart</string>
+    <string name="seeData">VIEW DATA</string>
+    <string name="thanks">Thanks!</string>
+    <string name="mock_app_name">Dr. Hou\'s Cafe</string>
 </resources>
