@@ -148,7 +148,7 @@
             android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="@+id/signUpInner"
-            app:layout_constraintHorizontal_bias="0.09"
+            app:layout_constraintHorizontal_bias="0.06"
             app:layout_constraintStart_toStartOf="@+id/signUpInner"
             app:layout_constraintTop_toTopOf="@+id/signUpInner" />
 
@@ -165,26 +165,28 @@
             app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
         <EditText
-            android:id="@+id/editText3"
-            android:layout_width="wrap_content"
+            android:id="@+id/firstNameEdit"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="8dp"
             android:ems="10"
             android:fontFamily="@font/roboto_slab"
             android:inputType="textPersonName"
-            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/signUpInner"
-            app:layout_constraintHorizontal_bias="0.67"
-            app:layout_constraintStart_toStartOf="@+id/signUpInner"
+            app:layout_constraintStart_toEndOf="@+id/nameTextView"
             app:layout_constraintTop_toTopOf="@+id/nameTextView" />
 
         <EditText
-            android:id="@+id/editText7"
-            android:layout_width="wrap_content"
+            android:id="@+id/lastNameEdit"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
             android:fontFamily="@font/roboto_slab"
             android:inputType="textPersonName"
-            app:layout_constraintStart_toStartOf="@+id/editText3"
+            app:layout_constraintEnd_toEndOf="@id/signUpInner"
+            app:layout_constraintStart_toStartOf="@+id/firstNameEdit"
             app:layout_constraintTop_toTopOf="@+id/nameTextView2" />
 
         <TextView
@@ -200,14 +202,16 @@
             app:layout_constraintTop_toBottomOf="@+id/nameTextView2" />
 
         <EditText
-            android:id="@+id/editText4"
+            android:id="@+id/emailEdit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
             android:fontFamily="@font/roboto_slab"
+            android:hint="example@domain.com"
             android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="@+id/editText6"
-            app:layout_constraintStart_toStartOf="@+id/editText3"
+            app:layout_constraintEnd_toEndOf="@id/signUpInner"
+            app:layout_constraintStart_toStartOf="@+id/firstNameEdit"
             app:layout_constraintTop_toTopOf="@+id/emailTextView" />
 
         <TextView
@@ -225,14 +229,16 @@
             app:layout_constraintTop_toBottomOf="@+id/passwordTextView" />
 
         <EditText
-            android:id="@+id/editText5"
-            android:layout_width="wrap_content"
+            android:id="@+id/birthdayEdit"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
             android:fontFamily="@font/roboto_slab"
             android:hint="MM/DD/YY"
             android:inputType="date"
-            app:layout_constraintStart_toStartOf="@+id/editText3"
+            app:layout_constraintEnd_toEndOf="@id/signUpInner"
+            app:layout_constraintStart_toStartOf="@+id/firstNameEdit"
             app:layout_constraintTop_toTopOf="@+id/birthdateTextView" />
 
         <TextView
@@ -248,13 +254,15 @@
             app:layout_constraintTop_toBottomOf="@+id/emailTextView" />
 
         <EditText
-            android:id="@+id/editText6"
-            android:layout_width="wrap_content"
+            android:id="@+id/passwordEdit"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
             android:fontFamily="@font/roboto_slab"
             android:inputType="textPassword"
-            app:layout_constraintStart_toStartOf="@+id/editText3"
+            app:layout_constraintEnd_toEndOf="@id/signUpInner"
+            app:layout_constraintStart_toStartOf="@+id/firstNameEdit"
             app:layout_constraintTop_toTopOf="@+id/passwordTextView" />
 
     </android.support.constraint.ConstraintLayout>

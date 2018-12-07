@@ -3,17 +3,16 @@ package com.example.lewis.sensorlogger;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
-import java.util.ArrayList;
+import android.widget.EditText;
 
 public class MainActivity extends Activity {
     private static String TAG = MainActivity.class.getName();
     private SensorLogManager sensorLogManager;
     private AccelerationSensorLogger accelerationSensorLogger;
     private SwipeTapSensorLogger swipeTapSensorLogger;
+    private EditText[] editTexts;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -35,6 +34,17 @@ public class MainActivity extends Activity {
         });
 
         swipeTapSensorLogger.start();
+
+        editTexts = new EditText[] {
+                findViewById(R.id.firstNameEdit),
+                findViewById(R.id.lastNameEdit),
+                findViewById(R.id.emailEdit),
+                findViewById(R.id.passwordEdit),
+                findViewById(R.id.birthdayEdit)
+        };
+
+        findViewById(R.id.submitButton).setOnClickListener(new SubmitButton());
+        findViewById(R.id.restartButton).setOnClickListener(new RestartButton());
     }
 
     @Override
@@ -46,7 +56,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume(){
         super.onResume();
-        findViewById(R.id.submitButton).setOnClickListener(new SubmitButton());
     }
 
     @Override
@@ -61,36 +70,23 @@ public class MainActivity extends Activity {
         accelerationSensorLogger.shutDown();
     }
 
+    private class
+
     private class SubmitButton implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             accelerationSensorLogger.shutDown();
-            ArrayList<SensorSample> acceleration = sensorLogManager.selectAllFromTable(
-                    AccelerationSensorTable.name,
-                    AccelerationSensorTable.columns);
-            Log.v(TAG, String.valueOf(acceleration.size()));
-
-            ArrayList<SensorSample> swipe = sensorLogManager.selectAllFromTable(
-                    SwipeSensorTable.name,
-                    SwipeSensorTable.columns);
-            Log.v(TAG, String.valueOf(swipe.size()));
-
-            for (int i = 0; i < acceleration.size(); ++i) {
-                SensorSample sample = acceleration.get(i);
-                Log.v(TAG, sample.timeStamp + ": " + sample.values[0] + ", " + sample.values[1] + ", " + sample.values[2]);
-            }
-
-            for (int i = 0; i < swipe.size(); ++i) {
-                SensorSample sample = swipe.get(i);
-                Log.v(TAG, sample.timeStamp + ": " + sample.values[0]);
-            }
-
             Intent formCompletedIntent = new Intent(MainActivity.this, FormCompletedActivity.class);
             MainActivity.this.startActivity(formCompletedIntent);
         }
     }
-}
 
-//Intent formCompletedIntent = new Intent(MainActivity.this, FormCompletedActivity.class);
-//formCompletedIntent.putExtra("DatabaseManager", sensorLogManager); //Optional parameters
-//MainActivity.this.startActivity(formCompletedIntent);
+    private class RestartButton implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            for (EditText editText : editTexts) {
+                editText.getText().clear();
+            }
+        }
+    }
+}
