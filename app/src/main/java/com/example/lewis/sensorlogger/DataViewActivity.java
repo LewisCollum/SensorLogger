@@ -19,12 +19,12 @@ public class DataViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dataview);
-        //ScrollView verticalScrollView = findViewById(R.id.dataVerticalScroll);
         HorizontalScrollView horizontalScrollView = findViewById(R.id.dataHorizontalScroll);
 
         sensorLogManager = new SensorLogManager(this);
         ArrayList<SensorSample> sensorSamples = new ArrayList<>();
         sensorSamples.addAll(sensorLogManager.selectAllFromTable(AccelerationSensorTable.name, AccelerationSensorTable.columns));
+        sensorSamples.addAll(sensorLogManager.selectAllFromTable(RotationSensorTable.name, RotationSensorTable.columns));
         sensorSamples.addAll(sensorLogManager.selectAllFromTable(SwipeSensorTable.name, SwipeSensorTable.columns));
         sensorSamples.addAll(sensorLogManager.selectAllFromTable(TapSensorTable.name, TapSensorTable.columns));
 
@@ -41,13 +41,20 @@ public class DataViewActivity extends Activity {
         grid.setRowCount(totalNumberRows);
         grid.setColumnCount(totalNumberColumns);
 
-        TextView[][] dataToDisplay = new TextView[totalNumberRows][totalNumberColumns];
+        TextView[][] dataToDisplay = new TextView[totalNumberRows+1][totalNumberColumns];
 
+        String[] columns = {"time (ms)", "x", "y", "z", "w"};
+        for (int column = 0; column < totalNumberColumns; ++column) {
+            dataToDisplay[0][column]= new TextView(this);
+            dataToDisplay[0][column].setText(columns[column]);
+            grid.addView(dataToDisplay[0][column], 300, 50);
+        }
 
-        for (int row = 0; row < totalNumberRows; ++row) {
-            String[] sensorSample = sensorSamples.get(row).getAll();
-            int columnOffset = totalNumberColumns - sensorSample.length;
+        for (int row = 1; row < totalNumberRows+1; ++row) {
+            String[] sensorSample = sensorSamples.get(row-1).getAll();
+            //int columnOffset = totalNumberColumns - sensorSample.length;
 
+            //dataToDisplay[row][0].setText(sensorSamples.get(row));
             for (int column = 0; column < totalNumberColumns; ++column) {
                 dataToDisplay[row][column]= new TextView(this);
                 if (column < sensorSample.length) {

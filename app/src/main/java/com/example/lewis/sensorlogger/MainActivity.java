@@ -2,15 +2,20 @@ package com.example.lewis.sensorlogger;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 public class MainActivity extends Activity {
     private static String TAG = MainActivity.class.getName();
     private SensorLogManager sensorLogManager;
     private AccelerationSensorLogger accelerationSensorLogger;
+    private RotationSensorLogger rotationSensorLogger;
     private SwipeTapSensorLogger swipeTapSensorLogger;
     private EditText[] editTexts;
 
@@ -22,19 +27,28 @@ public class MainActivity extends Activity {
         this.deleteDatabase(SensorLogInformation.name);
         sensorLogManager = new SensorLogManager(this);
         sensorLogManager.createTable(AccelerationSensorTable.name, AccelerationSensorTable.columns);
+        sensorLogManager.createTable(RotationSensorTable.name, RotationSensorTable.columns);
         sensorLogManager.createTable(SwipeSensorTable.name, SwipeSensorTable.columns);
         sensorLogManager.createTable(TapSensorTable.name, TapSensorTable.columns);
 
         accelerationSensorLogger = new AccelerationSensorLogger(this, sensorLogManager);
+        rotationSensorLogger = new RotationSensorLogger(this, sensorLogManager);
         swipeTapSensorLogger = new SwipeTapSensorLogger(this, sensorLogManager);
 
         accelerationSensorLogger.startUp();
+        rotationSensorLogger.startUp();
+
         swipeTapSensorLogger.setSensorLoggersToActivateOnTouch( new SensorLogger[] {
-                accelerationSensorLogger
+                accelerationSensorLogger,
+                rotationSensorLogger
         });
 
         swipeTapSensorLogger.start();
 
+        setupMockForm();
+    }
+
+    private void setupMockForm() {
         editTexts = new EditText[] {
                 findViewById(R.id.firstNameEdit),
                 findViewById(R.id.lastNameEdit),
@@ -53,27 +67,12 @@ public class MainActivity extends Activity {
         return super.dispatchTouchEvent(event);
     }
 
-    @Override
-    protected void onResume(){
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause(){
-        super.onPause();
-        accelerationSensorLogger.shutDown();
-    }
-
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        accelerationSensorLogger.shutDown();
-    }
-
     private class SubmitButton implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             accelerationSensorLogger.shutDown();
+            rotationSensorLogger.shutDown();
+
             Intent formCompletedIntent = new Intent(MainActivity.this, FormCompletedActivity.class);
             MainActivity.this.startActivity(formCompletedIntent);
         }
@@ -86,5 +85,26 @@ public class MainActivity extends Activity {
                 editText.getText().clear();
             }
         }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        accelerationSensorLogger.startUp();
+        rotationSensorLogger.startUp();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        accelerationSensorLogger.shutDown();
+        rotationSensorLogger.shutDown();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        accelerationSensorLogger.shutDown();
+        rotationSensorLogger.shutDown();
     }
 }

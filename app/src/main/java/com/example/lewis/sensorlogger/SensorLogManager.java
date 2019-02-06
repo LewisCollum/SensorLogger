@@ -19,7 +19,7 @@ public class SensorLogManager extends SQLiteOpenHelper {
     }
 
     public void createTable(String name, SQLColumn[] columnNames) {
-        addToTotalColumns(columnNames);
+        updateTotalColumns(columnNames);
         updateMostColumnsInTable(columnNames);
         SQLiteDatabase db = this.getWritableDatabase();
         String tableCommand = SQLStringTableGenerator.generate(name, columnNames);
@@ -27,8 +27,9 @@ public class SensorLogManager extends SQLiteOpenHelper {
     }
 
     //TODO extract class
-    private void addToTotalColumns(SQLColumn[] columns) {
-        SensorLogInformation.totalColumns += columns.length;
+    private void updateTotalColumns(SQLColumn[] columns) {
+        if (columns.length > SensorLogInformation.totalColumns)
+            SensorLogInformation.totalColumns = columns.length;
     }
 
     //TODO extract class
