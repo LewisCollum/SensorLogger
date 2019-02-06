@@ -5,15 +5,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.util.Log;
 
-public final class AccelerationSensorLogger extends SensorLogger {
-    private static String TAG = AccelerationSensorLogger.class.getName();
+public final class RotationSensorLogger extends SensorLogger {
+    private static String TAG = RotationSensorLogger.class.getName();
     private SensorListenerHelper sensorListenerHelper;
     private boolean allowedToRecord;
 
 
-    AccelerationSensorLogger(Context context, SensorLogManager sensorLogManager) {
+    RotationSensorLogger(Context context, SensorLogManager sensorLogManager) {
         super(sensorLogManager);
-        sensorListenerHelper = new AccelerationListenerHelper(context);
+        sensorListenerHelper = new RotationSensorLogger.RotationListenerHelper(context);
         sensorListenerHelper.start();
     }
 
@@ -45,18 +45,18 @@ public final class AccelerationSensorLogger extends SensorLogger {
         allowedToRecord = false;
     }
 
-    private class AccelerationListenerHelper extends SensorListenerHelper {
+    private class RotationListenerHelper extends SensorListenerHelper {
 
-        AccelerationListenerHelper(Context context) {
-            super(context, Sensor.TYPE_LINEAR_ACCELERATION);
+        RotationListenerHelper(Context context) {
+            super(context, Sensor.TYPE_ROTATION_VECTOR);
         }
 
         @Override
         public void onSensorChanged(SensorEvent sensorReading) {
             if (allowedToRecord) {
                 long timeStamp = SensorLogTime.currentMillis(System.currentTimeMillis());
-                AccelerationSensorSample sample = new AccelerationSensorSample(timeStamp, sensorReading.values);
-                sensorLogManager.insert(sample, AccelerationSensorTable.name);
+                RotationSensorSample sample = new RotationSensorSample(timeStamp, sensorReading.values);
+                sensorLogManager.insert(sample, RotationSensorTable.name);
             }
         }
     }
