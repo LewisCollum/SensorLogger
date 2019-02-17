@@ -1,12 +1,9 @@
 
 # Table of Contents
 
-1.  [Layout](#org01005f9)
 
 
+<div class="org-center">
+![img](figures/form.png "When users interact with the form, sensors collect data such as touch, swipe, accelerometer, etc. Used in "MainActivity.java".")
+</div>
 
-<a id="org01005f9"></a>
-
-# Layout
-
-![alt text](figures/form.png)
