@@ -9,5 +9,4 @@
 
 # Layout
 
-[![img](/home/charon/AndroidStudioProjects/SensorLogger/figures/form.png)](figures/form.png)
-
+![alt text](figures/form.png)
