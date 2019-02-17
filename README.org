@@ -1,0 +1,8 @@
+#+title: Mock Form Sensor Logger
+
+  #+begin_center
+  #+name: Mock Form
+  #+caption: When users interact with the form, sensors collect data such as touch, swipe, accelerometer, etc. Used in "MainActivity.java".
+  [[file:figures/form.png]]
+  #+end_center
+  
