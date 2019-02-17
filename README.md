@@ -1,12 +1,13 @@
-# SensorLogger
 
-TODO (in order)
-1. Refactor
-2. Save form to the database.
-3. Detect EditText Clicks
-4. Make data chart more readable (add table names, column names, etc)
-5. Add GyroscopeSensorLogger
+# Table of Contents
 
-Recommended Future Features:
-1. Add pressure sensing (part of swipeTapSensorLogger)
-2. Export database (e.g. send over email)
+1.  [Layout](#org01005f9)
+
+
+
+<a id="org01005f9"></a>
+
+# Layout
+
+[![img](/home/charon/AndroidStudioProjects/SensorLogger/figures/form.png)](figures/form.png)
+
