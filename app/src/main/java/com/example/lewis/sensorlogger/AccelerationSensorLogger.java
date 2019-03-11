@@ -11,8 +11,8 @@ public final class AccelerationSensorLogger extends SensorLogger {
     private boolean allowedToRecord;
 
 
-    AccelerationSensorLogger(Context context, SensorLogManager sensorLogManager) {
-        super(sensorLogManager);
+    AccelerationSensorLogger(Context context, SensorTCPManager sensorTCPManager) {
+        super(sensorTCPManager);
         sensorListenerHelper = new AccelerationListenerHelper(context);
         sensorListenerHelper.start();
     }
@@ -56,7 +56,7 @@ public final class AccelerationSensorLogger extends SensorLogger {
             if (allowedToRecord) {
                 long timeStamp = SensorLogTime.currentMillis(System.currentTimeMillis());
                 AccelerationSensorSample sample = new AccelerationSensorSample(timeStamp, sensorReading.values);
-                sensorLogManager.insert(sample, AccelerationSensorTable.name);
+                sensorTCPManager.insert(sample, "acc");
             }
         }
     }

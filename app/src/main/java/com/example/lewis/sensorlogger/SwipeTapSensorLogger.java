@@ -9,8 +9,8 @@ public final class SwipeTapSensorLogger extends SensorLogger {
     private SensorLogger[] sensorsLoggersToActivate;
     private TouchListenerHelper touchListenerHelper;
 
-    SwipeTapSensorLogger(Context context, SensorLogManager sensorLogManager) {
-        super(sensorLogManager);
+    SwipeTapSensorLogger(Context context, SensorTCPManager sensorTCPManager) {
+        super(sensorTCPManager);
         touchListenerHelper = new SwipeTapListenerHelper(context);
     }
 
@@ -70,7 +70,7 @@ public final class SwipeTapSensorLogger extends SensorLogger {
 
             long timeStamp = SensorLogTime.currentMillis(System.currentTimeMillis());
             TapSensorSample sample = new TapSensorSample(timeStamp, "\"Finger up\"");
-            sensorLogManager.insert(sample, TapSensorTable.name);
+            sensorTCPManager.insert(sample, TapSensorTable.name);
 
             return super.onUp(e);
         }
@@ -82,7 +82,7 @@ public final class SwipeTapSensorLogger extends SensorLogger {
 
             long timeStamp = SensorLogTime.currentMillis(System.currentTimeMillis());
             TapSensorSample sample = new TapSensorSample(timeStamp, "\"Finger down\"");
-            sensorLogManager.insert(sample, TapSensorTable.name);
+            sensorTCPManager.insert(sample, TapSensorTable.name);
 
             return super.onDown(e);
         }
@@ -101,7 +101,7 @@ public final class SwipeTapSensorLogger extends SensorLogger {
 
             long timeStamp = SensorLogTime.currentMillis(System.currentTimeMillis());
             SwipeSensorSample sample = new SwipeSensorSample(timeStamp, swipeDirection);
-            sensorLogManager.insert(sample, SwipeSensorTable.name);
+            sensorTCPManager.insert(sample, SwipeSensorTable.name);
 
             return super.onScroll(e1, e2, distanceX, distanceY);
         }

@@ -1,10 +1,10 @@
 package com.example.lewis.sensorlogger;
 
 public abstract class SensorLogger {
-    protected SensorLogManager sensorLogManager;
+    protected SensorTCPManager sensorTCPManager;
 
-    protected SensorLogger(SensorLogManager sensorLogManager) {
-        this.sensorLogManager = sensorLogManager;
+    protected SensorLogger(SensorTCPManager sensorTCPManager) {
+        this.sensorTCPManager = sensorTCPManager;
     }
 
     public abstract void start();

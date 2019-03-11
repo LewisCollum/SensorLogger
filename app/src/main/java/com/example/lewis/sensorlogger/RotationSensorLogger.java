@@ -11,8 +11,8 @@ public final class RotationSensorLogger extends SensorLogger {
     private boolean allowedToRecord;
 
 
-    RotationSensorLogger(Context context, SensorLogManager sensorLogManager) {
-        super(sensorLogManager);
+    RotationSensorLogger(Context context, SensorTCPManager sensorTCPManager) {
+        super(sensorTCPManager);
         sensorListenerHelper = new RotationSensorLogger.RotationListenerHelper(context);
         sensorListenerHelper.start();
     }
@@ -56,7 +56,7 @@ public final class RotationSensorLogger extends SensorLogger {
             if (allowedToRecord) {
                 long timeStamp = SensorLogTime.currentMillis(System.currentTimeMillis());
                 RotationSensorSample sample = new RotationSensorSample(timeStamp, sensorReading.values);
-                sensorLogManager.insert(sample, RotationSensorTable.name);
+                sensorTCPManager.insert(sample, "rot");
             }
         }
     }
