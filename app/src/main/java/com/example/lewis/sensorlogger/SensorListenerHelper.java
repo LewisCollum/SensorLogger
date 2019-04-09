@@ -16,7 +16,7 @@ public abstract class SensorListenerHelper implements SensorEventListener  {
     }
 
     public void start() {
-        int samplingPeriodUs = SensorManager.SENSOR_DELAY_GAME;
+        int samplingPeriodUs = SensorManager.SENSOR_DELAY_FASTEST;
         sensorManager.registerListener(this, sensor, samplingPeriodUs);
     }
 

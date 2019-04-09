@@ -23,12 +23,13 @@ public class SensorTCPManager {
     }
 
     public void insert(SensorSample sample, String tableName) {
-        StringBuilder output = new StringBuilder(tableName).append(", ");
+        StringBuilder output = new StringBuilder("BEGIN").append(',').append(tableName).append(',');
 
         for (String i: sample.getAll())
-            output.append(i).append(", ");
+            output.append(i).append(",");
 
-        output.deleteCharAt(output.length()-2);
+        output.append("END,");
+
         if (client.isConnected()) client.send(output.toString());
     }
 
