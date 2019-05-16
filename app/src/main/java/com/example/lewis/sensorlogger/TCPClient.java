@@ -13,8 +13,6 @@ public class TCPClient {
         try {
             outputStream.write(message.getBytes());
             outputStream.flush();
-            outputStream.write('\n');
-            outputStream.flush();
         } catch (IOException e) {e.printStackTrace();}
     }
 
